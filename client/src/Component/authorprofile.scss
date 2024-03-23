@@ -1,0 +1,19 @@
+.a-border{
+    border-radius: 20px;
+    background: white;
+    margin: 0 1px;
+    width: 180px;
+    &:hover{
+        background: rgb(255, 0, 140);
+        .pp{
+            color: white;
+        }
+        .posts{
+            color: white;
+        }
+    }
+}
+.posts{
+    font-size: 9px;
+    font-weight: bold;
+}

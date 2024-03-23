@@ -1,0 +1,111 @@
+@import url('https://fonts.googleapis.com/css2?family=Gentium+Book+Plus:wght@400;700&display=swap');
+
+body {
+    font-family: 'Gentium Book Plus', serif;
+    background: #EFEBEF;
+}
+
+ul {
+    list-style: none;
+}
+
+@media (min-width:0) and (max-width:576px) {
+
+    .icon {
+        margin-left: 50%;
+    }
+
+    .mainfooter {
+        width: 100%;
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .mid {
+        text-align: center;
+        margin-top: 20px;
+        width: 100%;
+        flex-direction: column;
+    }
+
+    .end {
+        text-align: center;
+        width: 100%;
+        margin-top: 20px;
+    }
+
+    .banner{
+        font-size: 30px !important;
+    }
+    .text-body-tertiary{
+        font-size: 16px !important;
+    }
+    .bhbtn{
+        margin-left: 0 !important;
+    }
+    .bcont{
+        // flex-direction: column;
+        flex-wrap: wrap;
+        justify-content: center !important;
+    }
+    .auth{
+        text-align: center !important;
+     padding-left: 30%;
+    }
+    .discover{
+        padding-left: 13%;
+    }
+    .fp{
+        flex-direction: column;
+        padding-left: 30%;
+        
+    }
+    .autho{
+        flex-direction: column; padding-left: 29%;
+    }
+}
+
+@media (min-width:577px) and (max-width:768px) {
+
+    .mainfooter {
+        width: 100%;
+        flex-direction: column;
+        text-align: center;
+    }
+    .mid {
+        text-align: center;
+        margin-top: 20px;
+        width: 100%;
+        flex-direction: column;
+    }
+
+    .end {
+        text-align: center;
+        width: 100%;
+        margin-top: 20px;
+    }
+    .banner{
+        font-size: 30px !important;
+    }
+    .text-body-tertiary{
+        font-size: 16px !important;
+    }
+    .bcont{
+        flex-wrap: wrap;
+        justify-content: center !important;
+    }
+    .auth{
+        text-align: center !important;
+        padding-left: 35%;
+    }
+    .discover{
+        padding-left: 20%;
+    }
+    .fp{
+        flex-wrap: wrap;
+        
+    }
+    .autho{
+       flex-wrap: wrap;
+    }
+}
