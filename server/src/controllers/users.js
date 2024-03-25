@@ -1,28 +1,40 @@
-//importing user model
-const User = require('../models/user')
+// Importing user model
+const User = require('../models/user');
 
-//importing bcrypt
+// Importing bcrypt
 const bcrypt = require('bcrypt');
 const saltRounds = 10;
 
-//controller function for register
+// Controller function for user registration
 const registerUser = async (req, res) => {
     try {
-        const existingUser = await User.findOne({ email: req.body.email })
+        // Check if the user already exists
+        const existingUser = await User.findOne({ email: req.body.email });
+        
         if (existingUser) {
-            res.send({ msg: 'user already exist' })
+            // If user already exists, return an error response
+            return res.status(400).json({ msg: 'User already exists' });
         } else {
-            const hashPassword = await bcrypt.hash(req.body.password, saltRounds)
+            // Hash the password
+            const hashPassword = await bcrypt.hash(req.body.password, saltRounds);
             req.body.password = hashPassword;
-            if(req.file){
-                req.body.avatar=req.file.filename;
-              }
-            await User.create(req.body)
-            res.send({ msg: 'user registered successfully' })
+
+            // If avatar file exists, set it in the request body
+            if (req.file) {
+                req.body.avatar = req.file.filename;
+            }
+
+            // Create a new user
+            await User.create(req.body);
+
+            // Respond with a success message
+            return res.status(200).json({ msg: 'User registered successfully' });
         }
     } catch (err) {
-        console.log(err)
+        // Handle any errors
+        console.error(err);
+        return res.status(400).json({ msg: 'Registration failed' });
     }
-}
+};
 
-module.exports = { registerUser }
+module.exports = { registerUser };

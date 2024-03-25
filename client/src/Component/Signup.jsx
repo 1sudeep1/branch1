@@ -1,7 +1,66 @@
-import React from 'react'
+import React, { useRef } from 'react'
 import { Link } from 'react-router-dom'
+import { useFormik } from 'formik';
+import * as Yup from 'yup';
+import axios from 'axios'
+import toast, { Toaster } from 'react-hot-toast';
 
-function Signup() {
+const getCharacterValidationError = (str) => {
+    return (`Your password must have at least 1 ${str}`)
+}
+const SignupSchema = Yup.object().shape({
+    fullName: Yup.string()
+        .min(2, 'Too Short!')
+        .max(50, 'Too Long!')
+        .required('Required'),
+    email: Yup.string().email('Invalid email').required('Required'),
+    password: Yup.string().min(5, 'password to short').required('please enter a password').matches(/[0-9]/, getCharacterValidationError('digit')).matches(/[a-z]/, getCharacterValidationError('lowercase')).matches(/[A-Z]/, getCharacterValidationError('uppercase')),
+    confirmPassword: Yup.string().required('please retype your password').oneOf([Yup.ref('password')], "password doesnot match"),
+    avatar: Yup.string().required('Required')
+});
+
+const Signup = () => {
+    const inputRef= useRef(null)
+    const formik = useFormik({
+        initialValues: {
+            fullName: '',
+            email: '',
+            password: '',
+            confirmPassword: '',
+            avatar: ''
+        },
+
+        validationSchema: SignupSchema,
+        onSubmit: values => {
+           handleRegister(values)
+           formik.resetForm()
+        }
+    })
+
+    const handleRegister= async(inputFields)=>{
+        try{
+            // console.log(inputRef.current.files[0])
+            const formData= new FormData();
+            formData.append('avatar', inputRef.current.files[0])
+           for(let item in inputFields){
+            formData.append(item, inputFields[item])
+           }
+           const res = await axios.post(`http://localhost:5000/register`, formData)
+           const data = await res.data
+        if (res.status === 200) {
+            // If registration is successful, show success message
+            toast.success(data.msg + '. Please login');
+        } else {
+            // If registration fails, show error message
+            toast.error(data.msg);
+        }
+    } catch (err) {
+        // Handle any errors
+        console.log(err);
+        // Show generic error message
+        toast.error('Registration failed!!! Please try again..');
+    }
+    }
     return (
         <>
             <div className="container my-3">
@@ -12,9 +71,34 @@ function Signup() {
                     </div>
                     <div className="col-lg-6">
                         <h2>CREATE ACCOUNT</h2>
-                        <input className='contact-input' type="text" placeholder='Your Name' />
-                        <input className='contact-input my-4' type="email" placeholder='Your email address' />
-                        <button className='btn btn-dark subscribe py-3 me-0 my-5'>CREATE ACCOUNT</button>
+                        <form onSubmit={formik.handleSubmit}>
+                            <input className='contact-input' type="text" name='fullName' placeholder='Your Name' onChange={formik.handleChange} value={formik.values.fullName} />
+                            {formik.touched.fullName && formik.errors.fullName &&
+                                <div className='text-danger'>
+                                    {formik.errors.fullName}
+                                </div>}
+                            <input className='contact-input my-4' type="email" name='email' placeholder='Your email address' onChange={formik.handleChange} value={formik.values.email} />
+                            {formik.touched.email && formik.errors.email &&
+                                <div className='text-danger'>
+                                    {formik.errors.email}
+                                </div>}
+                            <input className='contact-input' type='password' name='password' placeholder='Your password' onChange={formik.handleChange} value={formik.values.password} />
+                            {formik.touched.password && formik.errors.password &&
+                                <div className='text-danger'>
+                                    {formik.errors.password}
+                                </div>}
+                            <input className='contact-input my-4' type='password' name='confirmPassword' placeholder='Confirm-password' onChange={formik.handleChange} value={formik.values.confirmPassword} />
+                            {formik.touched.confirmPassword && formik.errors.confirmPassword &&
+                                <div className='text-danger'>
+                                    {formik.errors.confirmPassword}
+                                </div>}
+                            <input ref={inputRef} className='contact-input' type='file' name='avatar' onChange={formik.handleChange} value={formik.values.avatar} />
+                            {formik.touched.avatar && formik.errors.avatar &&
+                                <div className='text-danger'>
+                                    {formik.errors.avatar}
+                                </div>}
+                            <button type='submit' className='btn btn-dark subscribe py-3 me-0 my-5'>CREATE ACCOUNT</button>
+                        </form>
                     </div>
                 </div>
                 <p className='text-center'><Link to="/" className='my-5' style={{ textDecoration: 'none', color: 'black' }}>BACK TO HOMEPAGE</Link></p>
