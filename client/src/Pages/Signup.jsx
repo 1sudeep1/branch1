@@ -1,9 +1,8 @@
-import React, { useRef } from 'react'
-import { Link } from 'react-router-dom'
+import React, { useRef} from 'react'
+import { Link} from 'react-router-dom'
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import axios from 'axios'
-import toast, { Toaster } from 'react-hot-toast';
 
 const getCharacterValidationError = (str) => {
     return (`Your password must have at least 1 ${str}`)
@@ -20,7 +19,7 @@ const SignupSchema = Yup.object().shape({
 });
 
 const Signup = () => {
-    const inputRef= useRef(null)
+    const inputRef = useRef(null)
     const formik = useFormik({
         initialValues: {
             fullName: '',
@@ -32,34 +31,33 @@ const Signup = () => {
 
         validationSchema: SignupSchema,
         onSubmit: values => {
-           handleRegister(values)
-           formik.resetForm()
+            handleRegister(values)
+            formik.resetForm()
         }
     })
 
-    const handleRegister= async(inputFields)=>{
-        try{
-            // console.log(inputRef.current.files[0])
-            const formData= new FormData();
+    const handleRegister = async (inputFields) => {
+        try {
+            const formData = new FormData();
             formData.append('avatar', inputRef.current.files[0])
-           for(let item in inputFields){
-            formData.append(item, inputFields[item])
-           }
-           const res = await axios.post(`http://localhost:5000/register`, formData)
-           const data = await res.data
-        if (res.status === 200) {
-            // If registration is successful, show success message
-            toast.success(data.msg + '. Please login');
-        } else {
-            // If registration fails, show error message
-            toast.error(data.msg);
+            for (let item in inputFields) {
+                formData.append(item, inputFields[item])
+            }
+            const res = await axios.post(`http://localhost:5000/register`, formData)
+            const data = await res.data
+            if (res.status === 200) {
+                // If registration is successful, show success message
+                toast.success(data.msg + '. Please login');
+            } else {
+                // If registration fails, show error message
+                toast.error(data.msg);
+            }
+        } catch (err) {
+            // Handle any errors
+            console.log(err);
+            // Show generic error message
+            toast.error('Registration failed!!! Please try again..');
         }
-    } catch (err) {
-        // Handle any errors
-        console.log(err);
-        // Show generic error message
-        toast.error('Registration failed!!! Please try again..');
-    }
     }
     return (
         <>
@@ -92,11 +90,14 @@ const Signup = () => {
                                 <div className='text-danger'>
                                     {formik.errors.confirmPassword}
                                 </div>}
-                            <input ref={inputRef} className='contact-input' type='file' name='avatar' onChange={formik.handleChange} value={formik.values.avatar} />
-                            {formik.touched.avatar && formik.errors.avatar &&
-                                <div className='text-danger'>
-                                    {formik.errors.avatar}
-                                </div>}
+                            <div className='d-flex align-items-center'>
+                                <label htmlFor="avatar">Profile:</label>
+                                <input ref={inputRef} className='contact-input' id='avatar' type='file' name='avatar' onChange={formik.handleChange} value={formik.values.avatar} />
+                                {formik.touched.avatar && formik.errors.avatar &&
+                                    <div className='text-danger'>
+                                        {formik.errors.avatar}
+                                    </div>}
+                            </div>
                             <button type='submit' className='btn btn-dark subscribe py-3 me-0 my-5'>CREATE ACCOUNT</button>
                         </form>
                     </div>

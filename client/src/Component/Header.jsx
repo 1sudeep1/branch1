@@ -1,18 +1,7 @@
 import React, { useState } from 'react'
 import "./header.scss"
-import { Link, Route, Routes } from 'react-router-dom'
-import Home from '../Pages/Home'
-import About from '../Pages/About'
-import AuthorProfile from './AuthorProfile'
-import Authors from './Authors'
-import SingleAuthor from './SingleAuthor'
-import Contact from './Contact'
-import Membership from './Membership'
-import Login from './Login'
-import Signup from './Signup'
-import Subscribe from './Subscribe'
-import Posts from './Posts'
 import Author from '../Data/Author'
+import { Link } from 'react-router-dom';
 function Header() {
     const [showInput, setShowInput] = useState(false);
     const [searchQuery, setSearchQuery] = useState('');
@@ -103,18 +92,7 @@ function Header() {
                 </div>
             </header>
 
-            <Routes>
-                <Route path="/" element={<Home />} />
-                <Route path="/about" element={<About />} />
-                <Route path="/author" element={<Authors />} />
-                <Route path="/author/:aid" element={<SingleAuthor />} />
-                <Route path="/contact" element={<Contact />} />
-                <Route path="/membership" element={<Membership />} />
-                <Route path="/login" element={<Login />} />
-                <Route path="/signup" element={<Signup />} />
-                <Route path="/subscribe" element={<Subscribe />} />
-                <Route path="/post/:pid" element={<Posts />} />
-            </Routes>
+
         </>
     )
 }

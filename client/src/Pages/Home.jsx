@@ -3,9 +3,9 @@ import "../Pages/home.scss"
 import { Link } from 'react-router-dom'
 import Data from '../Data/Data'
 import Author from '../Data/Author'
-import AuthorProfile from '../Component/AuthorProfile'
-import Discoverall from '../Component/Discoverall'
-import FeaturedPost from '../Component/FeaturedPost'
+import AuthorProfile from './AuthorProfile'
+import Discoverall from './Discoverall'
+import FeaturedPost from './FeaturedPost'
 
 function Home() {
     { var abc = Data.filter((a) => a.cat == 'beauty') }
