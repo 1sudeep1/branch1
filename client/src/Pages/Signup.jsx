@@ -1,5 +1,5 @@
 import React, { useRef} from 'react'
-import { Link} from 'react-router-dom'
+import { Link, useNavigate} from 'react-router-dom'
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import axios from 'axios'
@@ -20,6 +20,7 @@ const SignupSchema = Yup.object().shape({
 
 const Signup = () => {
     const inputRef = useRef(null)
+   const navigate = useNavigate();
     const formik = useFormik({
         initialValues: {
             fullName: '',
@@ -46,6 +47,8 @@ const Signup = () => {
             const res = await axios.post(`http://localhost:5000/register`, formData)
             const data = await res.data
             if (res.status === 200) {
+                //redirect to login after success
+                navigate('/login');
                 // If registration is successful, show success message
                 toast.success(data.msg + '. Please login');
             } else {
