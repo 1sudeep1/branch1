@@ -1,29 +1,46 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
+import axios from 'axios';
+import { toast } from 'react-hot-toast';
 
-const getCharacterValidationError=(str)=>{
+const getCharacterValidationError = (str) => {
     return (`Your password must have at least 1 ${str}`)
 }
 
-const loginSchema=Yup.object().shape({
-    email:Yup.string().email('Invalid email').required('Required'),
+const loginSchema = Yup.object().shape({
+    email: Yup.string().email('Invalid email').required('Required'),
     password: Yup.string().min(5, 'password to short').required('please enter a password').matches(/[0-9]/, getCharacterValidationError('digit')).matches(/[a-z]/, getCharacterValidationError('lowercase')).matches(/[A-Z]/, getCharacterValidationError('uppercase')),
 })
 function Login() {
-    const formik=useFormik({
-        initialValues:{
-            email:'',
-            password:''
+    const navigate = useNavigate();
+    const formik = useFormik({
+        initialValues: {
+            email: '',
+            password: ''
         },
 
-        validationSchema:loginSchema,
+        validationSchema: loginSchema,
 
-        onSubmit:values=>{
-            console.log(values)
+        onSubmit: values => {
+            handleLogin(values)
         }
     })
+
+    const handleLogin = async (inputLogin) => {
+        const loginRes = await axios.post(`http://localhost:5000/login`, inputLogin)
+        const data = await loginRes.data
+        if (loginRes.status === 200) {
+            //redirect to home after success
+            navigate('/');
+            // If login is successful, show success message
+            toast.success(data.msg + '. Please login');
+        } else {
+            // If login fails, show error message
+            toast.error(data.msg);
+        }
+    }
     return (
         <>
             <div className="container my-3">

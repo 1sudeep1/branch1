@@ -10,7 +10,7 @@ const registerUser = async (req, res) => {
     try {
         // Check if the user already exists
         const existingUser = await User.findOne({ email: req.body.email });
-        
+
         if (existingUser) {
             // If user already exists, return an error response
             return res.status(400).json({ msg: 'User already exists' });
@@ -37,4 +37,34 @@ const registerUser = async (req, res) => {
     }
 };
 
-module.exports = { registerUser };
+// Controller function for user login
+const loginUser = async (req, res) => {
+    try {
+        // Check if the user already exists
+        const existingUser = await User.findOne({ email: req.body.email });
+
+        if (!existingUser) {
+            // Respond with a error message
+            return res.status(400).json({ msg: 'User does not exist' });
+        }
+
+        // Compare the entered password with the hashed password stored in the database
+        const passwordMatch = await bcrypt.compare(req.body.password, existingUser.password);
+
+        if (passwordMatch) {
+            // Respond with a success message
+            return res.status(200).json({ msg: 'Login successfull' });
+        } else {
+            // Respond with a error message
+            return res.status(400).json({ msg: 'Login failed' });
+        }
+    } catch (err) {
+        // Handle any errors
+        console.error(err);
+        return res.status(400).json({ msg: 'Login failed' });
+    }
+};
+
+
+
+module.exports = { registerUser, loginUser };
