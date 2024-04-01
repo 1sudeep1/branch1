@@ -3,6 +3,7 @@ import { Link, useNavigate} from 'react-router-dom'
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import axios from 'axios'
+import {toast} from 'react-hot-toast';
 
 const getCharacterValidationError = (str) => {
     return (`Your password must have at least 1 ${str}`)
