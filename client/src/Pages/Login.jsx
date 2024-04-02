@@ -4,6 +4,8 @@ import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import axios from 'axios';
 import { toast } from 'react-hot-toast';
+import { useDispatch } from 'react-redux';
+import { setUserDetails } from '../redux/reducerSlices/userSlice';
 
 const getCharacterValidationError = (str) => {
     return (`Your password must have at least 1 ${str}`)
@@ -14,6 +16,7 @@ const loginSchema = Yup.object().shape({
     password: Yup.string().min(5, 'password to short').required('please enter a password').matches(/[0-9]/, getCharacterValidationError('digit')).matches(/[a-z]/, getCharacterValidationError('lowercase')).matches(/[A-Z]/, getCharacterValidationError('uppercase')),
 })
 function Login() {
+    const dispatch= useDispatch()
     const navigate = useNavigate();
     const formik = useFormik({
         initialValues: {
@@ -36,6 +39,8 @@ function Login() {
             navigate('/');
             // If login is successful, show success message
             toast.success(data.msg + '. Please login');
+            dispatch(setUserDetails(data.existingUser))
+
         } else {
             // If login fails, show error message
             toast.error(data.msg);

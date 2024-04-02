@@ -53,7 +53,7 @@ const loginUser = async (req, res) => {
 
         if (passwordMatch) {
             // Respond with a success message
-            return res.status(200).json({ msg: 'Login successfull' });
+            return res.status(200).json({existingUser, msg: 'Login successfull' });
         } else {
             // Respond with a error message
             return res.status(400).json({ msg: 'Login failed' });
