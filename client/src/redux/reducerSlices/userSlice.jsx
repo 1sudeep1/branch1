@@ -10,7 +10,6 @@ export const userSlice = createSlice({
     initialState,
     reducers:{
         setUserDetails:(state, action)=>{
-            console.log(action.payload)
             return{
                 ...state,
                 userDetails:action.payload.existingUser,
