@@ -39,7 +39,7 @@ function Login() {
             navigate('/');
             // If login is successful, show success message
             toast.success(data.msg + '. Please login');
-            dispatch(setUserDetails(data.existingUser))
+            dispatch(setUserDetails(data))
 
         } else {
             // If login fails, show error message

@@ -1,6 +1,9 @@
 // Importing user model
 const User = require('../models/user');
 
+//importing jwt
+const jwt = require('jsonwebtoken');
+
 // Importing bcrypt
 const bcrypt = require('bcrypt');
 const saltRounds = 10;
@@ -52,8 +55,9 @@ const loginUser = async (req, res) => {
         const passwordMatch = await bcrypt.compare(req.body.password, existingUser.password);
 
         if (passwordMatch) {
+            const token = jwt.sign({ email: existingUser.email }, process?.env.SECRET_KEY);
             // Respond with a success message
-            return res.status(200).json({existingUser, msg: 'Login successfull' });
+            return res.status(200).json({existingUser, token,  msg: 'Login successfull' });
         } else {
             // Respond with a error message
             return res.status(400).json({ msg: 'Login failed' });

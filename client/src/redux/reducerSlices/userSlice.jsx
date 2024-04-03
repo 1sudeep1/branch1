@@ -13,7 +13,8 @@ export const userSlice = createSlice({
             console.log(action.payload)
             return{
                 ...state,
-                userDetails:action.payload,
+                userDetails:action.payload.existingUser,
+                token:action.payload.token,
                 isLoggedIn:true
             }
         }
