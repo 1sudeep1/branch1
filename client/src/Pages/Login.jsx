@@ -38,7 +38,7 @@ function Login() {
             //redirect to home after success
             navigate('/');
             // If login is successful, show success message
-            toast.success(data.msg + '. Please login');
+            toast.success(data.msg);
             dispatch(setUserDetails(data))
 
         } else {

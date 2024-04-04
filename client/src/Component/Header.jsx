@@ -1,12 +1,17 @@
 import React, { useState } from 'react'
 import "./header.scss"
 import Author from '../Data/Author'
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { setLogout } from '../redux/reducerSlices/userSlice';
 function Header() {
     const [showInput, setShowInput] = useState(false);
     const [searchQuery, setSearchQuery] = useState('');
     const [searchResults, setSearchResults] = useState([]);
 
+    const { isLoggedIn } = useSelector(state => state.user);
+    const dispatch= useDispatch()
+    const navigate = useNavigate();
 
     const toggleInput = () => {
         setShowInput(!showInput);
@@ -17,17 +22,23 @@ function Header() {
 
         const filteredData = Author.filter((a) => {
             const name = a.autname.toLowerCase();
-            const query=searchQuery.toLowerCase();
+            const query = searchQuery.toLowerCase();
             return name.includes(query);
         })
 
         setSearchResults(filteredData);
     }
 
-    const clearResults=()=>{
+    const clearResults = () => {
         setSearchQuery('');
         setSearchResults([]);
     }
+
+    const handleLogout=async()=>{
+        await navigate('/login')
+        dispatch(setLogout())
+    }
+
     return (
         <>
             <header>
@@ -51,7 +62,11 @@ function Header() {
                                     <li><Link to="/author" style={{ textDecoration: 'none', color: 'white' }}>AUTHORS</Link></li>
                                     <li><Link to="/contact" style={{ textDecoration: 'none', color: 'white' }}>CONTACT</Link></li>
                                     <li><Link to="/membership" style={{ textDecoration: 'none', color: 'white' }}>MEMBERSHIP</Link></li>
-                                    <li><Link to="/login" style={{ textDecoration: 'none', color: 'white' }}>LOGIN</Link></li>
+                                    {isLoggedIn ?
+                                        <li onClick={handleLogout} style={{ textDecoration: 'none', color: 'white', cursor: 'pointer'}}>LOGOUT</li>
+                                        :
+                                        <li><Link to="/login" style={{ textDecoration: 'none', color: 'white' }}>LOGIN</Link></li>
+                                    }
                                     <li><Link to="/subscribe" style={{ textDecoration: 'none', color: 'white' }}>SUBSCRIBE</Link></li>
                                 </ul>
                             </div>
@@ -74,14 +89,14 @@ function Header() {
                         <div className="row justify-content-center">
                             <div className="col-lg-6 col-md-6 cold-sm-12">
                                 <ul className="list-group list-group-flush">
-                                {searchResults.map((b) => (
-                                    <li className="list-group-item" key={b.id}>
-                                       <Link to={`/author/${b.id}`} style={{color:'black', textDecoration:'none'}}> {b.autname}</Link>
-                                        
-                                    </li>
+                                    {searchResults.map((b) => (
+                                        <li className="list-group-item" key={b.id}>
+                                            <Link to={`/author/${b.id}`} style={{ color: 'black', textDecoration: 'none' }}> {b.autname}</Link>
+
+                                        </li>
                                     ))}
 
-                                    {searchResults.length>5 && (
+                                    {searchResults.length > 5 && (
                                         <button onClick={clearResults}>Clear Results</button>
                                     )}
                                 </ul>
