@@ -13,6 +13,10 @@ import Login from './Pages/Login'
 import Signup from './Pages/Signup'
 import Subscribe from './Pages/Subscribe'
 import Posts from './Pages/Posts'
+import Dashboard from './Pages/Dashboard'
+import NewPost from './Pages/NewPost'
+import AllPost from './Pages/AllPost'
+import Sidebar from './Component/Sidebar'
 function App() {
   return (
     <div>
@@ -29,6 +33,14 @@ function App() {
         <Route path="/subscribe" element={<Subscribe />} />
         <Route path="/post/:pid" element={<Posts />} />
       </Routes>
+
+      <Sidebar>
+        <Routes>
+          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/dashboard/new-post" element={<NewPost />} />
+          <Route path="/dashboard/all-post" element={<AllPost />} />
+        </Routes>
+      </Sidebar>
       <Footer />
     </div>
   )
